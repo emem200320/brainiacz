@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brainiacz Tutoring App Flowchart</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #1976D2;
+            text-align: center;
+        }
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .legend {
+            margin-top: 30px;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .color-box {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        .primary {
+            background-color: #BBDEFB;
+            border: 1px solid #1976D2;
+        }
+        .secondary {
+            background-color: #E8F5E9;
+            border: 1px solid #388E3C;
+        }
+        .database {
+            background-color: #FFECB3;
+            border: 1px solid #FFA000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Brainiacz Tutoring App Flowchart</h1>
+        
+        <div class="mermaid">
+graph TD
+    %% Main entry points
+    Start([App Launch]) --> SplashScreen
+    SplashScreen --> AuthCheck{User Logged In?}
+    AuthCheck -->|No| RoleSelection
+    AuthCheck -->|Yes| RoleCheck
+    
+    %% Authentication Flow
+    RoleSelection -->|Select Role| Login
+    RoleSelection -->|New User| Signup
+    Signup --> RoleSelection
+    Login --> RoleCheck{User Role?}
+
+    %% Role-based Navigation
+    RoleCheck -->|Student| StudentHome
+    RoleCheck -->|Tutor| TutorHome
+    RoleCheck -->|Admin| AdminHome
+
+    %% Student Flow
+    StudentHome -->|View Tabs| StudentTabs
+    StudentTabs -->|Search Tutors| SearchResults
+    StudentTabs -->|View Chats| StudentChats
+    StudentTabs -->|View Requests| StudentRequests
+    StudentTabs -->|Update Profile| StudentProfile
+    
+    SearchResults -->|View Tutor Details| TutorDetails
+    TutorDetails -->|Request Session| RequestForm
+    RequestForm -->|Submit Request| RequestSent
+    RequestSent --> StudentRequests
+    
+    StudentRequests -->|View Details| SessionDetails
+    SessionDetails -->|Join Video Call| GoogleMeet
+    StudentChats -->|Open Chat| ChatScreen
+    
+    %% Tutor Flow
+    TutorHome -->|View Tabs| TutorTabs
+    TutorTabs -->|View Requests| TutorRequests
+    TutorTabs -->|View Chats| TutorChats
+    TutorTabs -->|Update Profile| TutorProfile
+    
+    TutorRequests -->|Accept/Reject Request| RequestStatusUpdate
+    RequestStatusUpdate -->|Accept| SessionCreated
+    SessionCreated -->|Create Chat| ChatCreated
+    TutorChats -->|Open Chat| ChatScreen
+    
+    %% Admin Flow
+    AdminHome -->|View Reports| AdminReports
+    AdminHome -->|Content Moderation| ContentModeration
+    
+    %% Shared Components
+    ChatScreen -->|Send Message| MessageSent
+    MessageSent --> ChatScreen
+    ChatScreen -->|Join Video Call| GoogleMeet
+    
+    %% Profile Management
+    StudentProfile -->|Update Profile Info| ProfileUpdate
+    StudentProfile -->|Upload Profile Image| ImageUpload
+    TutorProfile -->|Update Profile Info| ProfileUpdate
+    TutorProfile -->|Upload Profile Image| ImageUpload
+    
+    %% Database Operations
+    ProfileUpdate -->|Save to Firestore| FirestoreUpdate
+    ImageUpload -->|Upload to Storage| FirebaseStorage
+    
+    %% Session Management
+    class SplashScreen,RoleSelection,Login,Signup,StudentHome,TutorHome,AdminHome,StudentProfile,TutorProfile,SearchResults,TutorDetails,RequestForm,SessionDetails,ChatScreen,GoogleMeet,AdminReports,ContentModeration primary
+    class StudentTabs,TutorTabs secondary
+    class FirestoreUpdate,FirebaseStorage,SessionCreated,ChatCreated,MessageSent,RequestStatusUpdate database
+    
+    style Primary fill:#BBDEFB,stroke:#1976D2,color:#01579B
+    style Secondary fill:#E8F5E9,stroke:#388E3C,color:#1B5E20
+    style Database fill:#FFECB3,stroke:#FFA000,color:#FF6F00
+        </div>
+        
+        <div class="legend">
+            <h3>Legend</h3>
+            <div class="legend-item">
+                <div class="color-box primary"></div>
+                <span>Primary Screens</span>
+            </div>
+            <div class="legend-item">
+                <div class="color-box secondary"></div>
+                <span>Secondary UI Components</span>
+            </div>
+            <div class="legend-item">
+                <div class="color-box database"></div>
+                <span>Database Operations</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: false,
+                htmlLabels: true
+            }
+        });
+    </script>
+</body>
+</html>

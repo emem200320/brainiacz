@@ -1,3 +1,15 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.3.1' // Use the appropriate version for your project
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0" // Use the appropriate Kotlin version
+        classpath 'com.google.gms:google-services:4.3.15' // Use the latest version of Google Services plugin
+    }
+}
+
 allprojects {
     repositories {
         google()

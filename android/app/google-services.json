@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "439789822578",
+    "project_id": "brainless-44c20",
+    "storage_bucket": "brainless-44c20.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439789822578:android:0cc9dfde131626d68358eb",
+        "android_client_info": {
+          "package_name": "com.example.brainiacz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHlRent4NfSy3Ry5acWHIYB1_YeT4YNAs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

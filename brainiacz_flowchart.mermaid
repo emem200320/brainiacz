@@ -1,0 +1,79 @@
+graph TD
+    %% Main entry points
+    Start([App Launch]) --> SplashScreen
+    SplashScreen --> AuthCheck{User Logged In?}
+    AuthCheck -->|No| RoleSelection
+    AuthCheck -->|Yes| RoleCheck
+    
+    %% Authentication Flow
+    RoleSelection -->|Select Role| Login
+    RoleSelection -->|New User| Signup
+    Signup --> RoleSelection
+    Login --> RoleCheck{User Role?}
+
+    %% Role-based Navigation
+    RoleCheck -->|Student| StudentHome
+    RoleCheck -->|Tutor| TutorHome
+    RoleCheck -->|Admin| AdminHome
+
+    %% Student Flow
+    StudentHome -->|View Tabs| StudentTabs
+    StudentTabs -->|Search Tutors| SearchResults
+    StudentTabs -->|View Chats| StudentChats
+    StudentTabs -->|View Requests| StudentRequests
+    StudentTabs -->|Update Profile| StudentProfile
+    
+    SearchResults -->|View Tutor Details| TutorDetails
+    TutorDetails -->|Request Session| RequestForm
+    RequestForm -->|Submit Request| RequestSent
+    RequestSent --> StudentRequests
+    
+    StudentRequests -->|View Details| SessionDetails
+    SessionDetails -->|Join Video Call| GoogleMeet
+    StudentChats -->|Open Chat| ChatScreen
+    
+    %% Tutor Flow
+    TutorHome -->|View Tabs| TutorTabs
+    TutorTabs -->|View Requests| TutorRequests
+    TutorTabs -->|View Chats| TutorChats
+    TutorTabs -->|Update Profile| TutorProfile
+    
+    TutorRequests -->|Accept/Reject Request| RequestStatusUpdate
+    RequestStatusUpdate -->|Accept| SessionCreated
+    SessionCreated -->|Create Chat| ChatCreated
+    TutorChats -->|Open Chat| ChatScreen
+    
+    %% Admin Flow
+    AdminHome -->|View Reports| AdminReports
+    AdminHome -->|Content Moderation| ContentModeration
+    
+    %% Shared Components
+    ChatScreen -->|Send Message| MessageSent
+    MessageSent --> ChatScreen
+    ChatScreen -->|Join Video Call| GoogleMeet
+    
+    %% Profile Management
+    StudentProfile -->|Update Profile Info| ProfileUpdate
+    StudentProfile -->|Upload Profile Image| ImageUpload
+    TutorProfile -->|Update Profile Info| ProfileUpdate
+    TutorProfile -->|Upload Profile Image| ImageUpload
+    
+    %% Database Operations
+    ProfileUpdate -->|Save to Firestore| FirestoreUpdate
+    ImageUpload -->|Upload to Storage| FirebaseStorage
+    
+    %% Session Management
+    class SplashScreen,RoleSelection,Login,Signup,StudentHome,TutorHome,AdminHome,StudentProfile,TutorProfile,SearchResults,TutorDetails,RequestForm,SessionDetails,ChatScreen,GoogleMeet,AdminReports,ContentModeration primary
+    class StudentTabs,TutorTabs secondary
+    class FirestoreUpdate,FirebaseStorage,SessionCreated,ChatCreated,MessageSent,RequestStatusUpdate database
+    
+    %% Legend
+    subgraph "Legend"
+        Primary[Primary Screens]
+        Secondary[Secondary UI Components]
+        Database[Database Operations]
+    end
+
+    style Primary fill:#BBDEFB,stroke:#1976D2,color:#01579B
+    style Secondary fill:#E8F5E9,stroke:#388E3C,color:#1B5E20
+    style Database fill:#FFECB3,stroke:#FFA000,color:#FF6F00
