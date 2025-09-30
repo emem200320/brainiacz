@@ -1,16 +1,38 @@
-# brainiacz
+# Brainiacz Tutoring App
 
-A new Flutter project.
+Brainiacz is a modern, cross-platform tutoring application built with Flutter. It connects students with qualified tutors, enabling seamless session booking, real-time chat, and resource sharing. The app features robust user management, session scheduling, and a clean, intuitive interface for both students and tutors.
+
+## Features
+
+- 🔍 **Tutor Search & Profiles:** Students can search for tutors by subject, view detailed profiles, and see ratings.
+- 📅 **Session Booking:** Book sessions with date and time selection, and receive real-time updates.
+- 💬 **Chat System:** Secure, in-app messaging between students and tutors.
+- ⭐ **Ratings & Reviews:** Students can rate and review tutors after sessions.
+- 📚 **Module Sharing:** Tutors can upload and share learning modules/resources.
+- 👩‍💼 **Admin Panel:** Manage users, moderate content, and oversee platform activity.
+- 🔒 **Authentication:** Secure sign-up and login for students, tutors, and admins.
+- 🛡️ **Role-Based Access:** Distinct experiences for students, tutors, and admins.
+
+## Screenshots
+
+<!-- Add your screenshots here -->
+<p align="center">
+  <img src="assets/screenshots/home.png" width="250"/>
+  <img src="assets/screenshots/tutor_profile.png" width="250"/>
+  <img src="assets/screenshots/session_booking.png" width="250"/>
+</p>
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Prerequisites
 
-A few resources to get you started if this is your first Flutter project:
+- [Flutter SDK](https://flutter.dev/docs/get-started/install)
+- [Firebase Project](https://firebase.google.com/)
+- Android Studio or Xcode (for mobile development)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Installation
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/yourusername/brainiacz.git
+   cd brainiacz
