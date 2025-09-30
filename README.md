@@ -13,15 +13,6 @@ Brainiacz is a modern, cross-platform tutoring application built with Flutter. I
 - 🔒 **Authentication:** Secure sign-up and login for students, tutors, and admins.
 - 🛡️ **Role-Based Access:** Distinct experiences for students, tutors, and admins.
 
-## Screenshots
-
-<!-- Add your screenshots here -->
-<p align="center">
-  <img src="assets/screenshots/home.png" width="250"/>
-  <img src="assets/screenshots/tutor_profile.png" width="250"/>
-  <img src="assets/screenshots/session_booking.png" width="250"/>
-</p>
-
 ## Getting Started
 
 ### Prerequisites
