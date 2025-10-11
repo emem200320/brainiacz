@@ -25,5 +25,5 @@ Brainiacz is a modern, cross-platform tutoring application built with Flutter. I
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/yourusername/brainiacz.git
+   git clone https://github.com/emem200320/brainiacz.git
    cd brainiacz
