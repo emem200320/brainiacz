@@ -467,13 +467,17 @@ class _TutorHomeScreenState extends State<TutorHomeScreen>
 
             switch (status) {
               case 'accepted':
-                cardColor = Colors.green.shade50;
+                cardColor = const Color(0xFF0D1F14);
                 actionButtons = Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     OutlinedButton.icon(
-                      icon: Icon(Icons.chat),
-                      label: Text('Open Chat'),
+                      icon: const Icon(Icons.chat_rounded, size: 16, color: Color(0xFF6C3FD8)),
+                      label: const Text('Open Chat', style: TextStyle(color: Color(0xFF6C3FD8))),
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Color(0xFF6C3FD8)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -493,31 +497,34 @@ class _TutorHomeScreenState extends State<TutorHomeScreen>
                 );
                 break;
               case 'rejected':
-                cardColor = Colors.red.shade50;
+                cardColor = const Color(0xFF1F0D0D);
                 actionButtons = Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text('Request declined',
+                  child: const Text('Request declined',
                       style: TextStyle(
-                          fontStyle: FontStyle.italic, color: Colors.grey)),
+                          fontStyle: FontStyle.italic, color: Colors.white30)),
                 );
                 break;
               case 'pending':
               default:
-                cardColor = Colors.orange.shade50;
-                actionButtons = Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                cardColor = const Color(0xFF13131F);
+                actionButtons = Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  alignment: WrapAlignment.end,
                   children: [
                     OutlinedButton(
-                      onPressed: () {
-                        // Navigate to a limited student profile view
-                        _showStudentProfile(studentId);
-                      },
-                      child: Text('View Profile'),
+                      onPressed: () => _showStudentProfile(studentId),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFFA78BFA),
+                        side: const BorderSide(color: Color(0xFF6C3FD8)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      ),
+                      child: const Text('View Profile', style: TextStyle(fontSize: 13)),
                     ),
-                    SizedBox(width: 10),
                     OutlinedButton(
                       onPressed: () async {
-                        // Reject request
                         await FirebaseFirestore.instance
                             .collection('requests')
                             .doc(requestId)
@@ -525,34 +532,46 @@ class _TutorHomeScreenState extends State<TutorHomeScreen>
                           'status': 'rejected',
                           'updatedAt': FieldValue.serverTimestamp(),
                         });
-
-                        // Reload data
                         _loadRequests();
                       },
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: Colors.red,
+                        foregroundColor: Colors.redAccent,
+                        side: const BorderSide(color: Colors.redAccent),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       ),
-                      child: Text('Decline'),
+                      child: const Text('Decline', style: TextStyle(fontSize: 13)),
                     ),
-                    SizedBox(width: 10),
                     ElevatedButton(
-                      onPressed: () async {
-                        await _acceptRequest(requestId, studentId);
-                      },
+                      onPressed: () async => await _acceptRequest(requestId, studentId),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
+                        backgroundColor: const Color(0xFF6C3FD8),
                         foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        elevation: 0,
                       ),
-                      child: Text('Accept'),
+                      child: const Text('Accept', style: TextStyle(fontSize: 13)),
                     ),
                   ],
                 );
                 break;
             }
 
-            return Card(
-              margin: EdgeInsets.only(bottom: 10),
-              color: cardColor,
+            return Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              decoration: BoxDecoration(
+                color: cardColor,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: status == 'accepted'
+                      ? Colors.green.withOpacity(0.3)
+                      : status == 'rejected'
+                          ? Colors.red.withOpacity(0.3)
+                          : const Color(0xFF6C3FD8).withOpacity(0.25),
+                  width: 1,
+                ),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -561,29 +580,42 @@ class _TutorHomeScreenState extends State<TutorHomeScreen>
                     Row(
                       children: [
                         CircleAvatar(
+                          backgroundColor: const Color(0xFF6C3FD8).withOpacity(0.2),
                           backgroundImage: studentProfileUrl != null
                               ? NetworkImage(studentProfileUrl)
                               : null,
                           child: studentProfileUrl == null
                               ? Text(
-                                  studentName.isNotEmpty ? studentName[0] : '?')
+                                  studentName.isNotEmpty ? studentName[0] : '?',
+                                  style: const TextStyle(color: Color(0xFFA78BFA), fontWeight: FontWeight.w700),
+                                )
                               : null,
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 studentName,
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
+                                style: const TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
                               ),
                               Text(
-                                  '$subject - $formattedSessionDate at $sessionTime'),
+                                '$subject · $formattedSessionDate at $sessionTime',
+                                style: const TextStyle(fontSize: 12, color: Colors.white54),
+                              ),
+                              const SizedBox(height: 2),
                               Text('Status: $status',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 12,
+                                    color: status == 'accepted'
+                                        ? Colors.greenAccent
+                                        : status == 'rejected'
+                                            ? Colors.redAccent
+                                            : const Color(0xFFA78BFA),
+                                  )),
                             ],
                           ),
                         ),
@@ -610,14 +642,14 @@ class _TutorHomeScreenState extends State<TutorHomeScreen>
           children: [
             Text(
               'Active Chats',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white70),
             ),
             Row(
               children: [
                 Text('Last updated: ${_formatTime(_lastChatsRefresh)}',
-                    style: TextStyle(fontSize: 12, color: Colors.grey)),
+                    style: const TextStyle(fontSize: 12, color: Colors.white30)),
                 IconButton(
-                  icon: Icon(Icons.refresh, color: Colors.blue),
+                  icon: const Icon(Icons.refresh_rounded, color: Color(0xFF6C3FD8)),
                   onPressed: () {
                     if (kDebugMode) {
                       print("Manual refresh of tutor chats requested");
@@ -784,21 +816,32 @@ class _TutorHomeScreenState extends State<TutorHomeScreen>
               }
             }
 
-            return Card(
-              margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
+              decoration: BoxDecoration(
+                color: const Color(0xFF13131F),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xFF6C3FD8).withOpacity(0.25), width: 1),
+              ),
               child: ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 leading: CircleAvatar(
+                  radius: 24,
                   backgroundImage: studentProfileUrl != null
                       ? NetworkImage(studentProfileUrl)
                       : null,
-                  backgroundColor: Colors.blue.shade100,
+                  backgroundColor: const Color(0xFF6C3FD8).withOpacity(0.3),
                   child: studentProfileUrl == null
-                      ? Text(studentName.isNotEmpty
-                          ? studentName[0].toUpperCase()
-                          : '?')
+                      ? Text(
+                          studentName.isNotEmpty ? studentName[0].toUpperCase() : '?',
+                          style: const TextStyle(color: Color(0xFFA78BFA), fontWeight: FontWeight.w700),
+                        )
                       : null,
                 ),
-                title: Text(studentName),
+                title: Text(
+                  studentName,
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15),
+                ),
                 subtitle: Row(
                   children: [
                     Expanded(
@@ -806,19 +849,17 @@ class _TutorHomeScreenState extends State<TutorHomeScreen>
                         lastMessage,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(color: Colors.white38, fontSize: 13),
                       ),
                     ),
                     if (timeAgo.isNotEmpty)
                       Text(
                         timeAgo,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                        ),
+                        style: const TextStyle(fontSize: 11, color: Colors.white24),
                       ),
                   ],
                 ),
-                trailing: Icon(Icons.arrow_forward_ios, size: 16),
+                trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: Color(0xFF6C3FD8)),
                 onTap: () {
                   // Navigate to the chat screen with the student
                   Navigator.push(
@@ -872,9 +913,9 @@ class _TutorHomeScreenState extends State<TutorHomeScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'My Chats',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white),
             ),
             SizedBox(height: 16),
             _buildActiveChatsSection(),
@@ -899,17 +940,17 @@ class _TutorHomeScreenState extends State<TutorHomeScreen>
           children: [
             Text(
               'Requests Received',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white),
             ),
             SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text('Last updated: ${_formatTime(_lastRequestsRefresh)}',
-                    style: TextStyle(fontSize: 12, color: Colors.grey)),
+                    style: const TextStyle(fontSize: 12, color: Colors.white30)),
                 IconButton(
                   onPressed: _loadRequests,
-                  icon: Icon(Icons.refresh, size: 16),
+                  icon: const Icon(Icons.refresh_rounded, size: 16, color: Color(0xFF6C3FD8)),
                   tooltip: 'Refresh requests',
                 ),
               ],
@@ -930,90 +971,167 @@ class _TutorHomeScreenState extends State<TutorHomeScreen>
     return ModuleSection();
   }
 
+  Widget _drawerItem({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    bool isDestructive = false,
+  }) {
+    final color = isDestructive ? Colors.redAccent : const Color(0xFFA78BFA);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: onTap,
+          splashColor: const Color(0xFF6C3FD8).withOpacity(0.15),
+          highlightColor: const Color(0xFF6C3FD8).withOpacity(0.08),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                Icon(icon, color: color, size: 22),
+                const SizedBox(width: 16),
+                Text(
+                  label,
+                  style: TextStyle(
+                    color: isDestructive ? Colors.redAccent : Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: const Color(0xFF0A0A0F),
       appBar: AppBar(
-        title: Text('Tutor Dashboard'),
+        backgroundColor: const Color(0xFF0A0A0F),
+        elevation: 0,
+        title: const Text(
+          'Tutor Dashboard',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 20),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
         bottom: TabBar(
           controller: _tabController,
-          tabs: [
-            Tab(text: 'My Chats', icon: Icon(Icons.chat)),
-            Tab(text: 'My Profile', icon: Icon(Icons.person)),
-            Tab(text: 'Requests', icon: Icon(Icons.assignment_ind)),
-            Tab(text: 'My Modules', icon: Icon(Icons.book)), // Add new tab
+          indicatorColor: const Color(0xFF6C3FD8),
+          indicatorWeight: 3,
+          labelColor: const Color(0xFF6C3FD8),
+          unselectedLabelColor: Colors.white38,
+          labelStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+          tabs: const [
+            Tab(text: 'My Chats', icon: Icon(Icons.chat_rounded, size: 20)),
+            Tab(text: 'My Profile', icon: Icon(Icons.person_rounded, size: 20)),
+            Tab(text: 'Requests', icon: Icon(Icons.assignment_ind_rounded, size: 20)),
+            Tab(text: 'My Modules', icon: Icon(Icons.book_rounded, size: 20)),
           ],
         ),
         actions: [
-          // Add a refresh button to the app bar
           IconButton(
-            icon: Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh_rounded, color: Colors.white54),
             onPressed: _refreshAll,
             tooltip: 'Refresh All',
           ),
         ],
       ),
       drawer: Drawer(
+        backgroundColor: const Color(0xFF0A0A0F),
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
+            // Header
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 56, 20, 24),
+              decoration: const BoxDecoration(
+                color: Color(0xFF13131F),
+                border: Border(
+                  bottom: BorderSide(color: Color(0xFF6C3FD8), width: 0.5),
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: 30,
-                    child: Icon(Icons.school, size: 40, color: Colors.blue),
+                  Container(
+                    padding: const EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: const Color(0xFF6C3FD8), width: 2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF6C3FD8).withOpacity(0.35),
+                          blurRadius: 12,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                    ),
+                    child: const CircleAvatar(
+                      backgroundColor: Color(0xFF1E1340),
+                      radius: 30,
+                      child: Icon(Icons.school_rounded, size: 32, color: Color(0xFFA78BFA)),
+                    ),
                   ),
-                  SizedBox(height: 10),
-                  Text(
+                  const SizedBox(height: 14),
+                  const Text(
                     'Tutor Menu',
-                    style: TextStyle(color: Colors.white, fontSize: 24),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.3,
+                    ),
                   ),
+                  const SizedBox(height: 2),
                   Text(
                     FirebaseAuth.instance.currentUser?.email ?? 'Tutor',
-                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                    style: const TextStyle(color: Colors.white38, fontSize: 13),
                   ),
                 ],
               ),
             ),
-            ListTile(
-              leading: Icon(Icons.chat),
-              title: Text('Messages'),
+            const SizedBox(height: 12),
+            // Menu items
+            _drawerItem(
+              icon: Icons.chat_rounded,
+              label: 'Messages',
               onTap: () {
                 Navigator.pop(context);
-                // Switch to messages tab
                 _tabController.animateTo(0);
               },
             ),
-            ListTile(
-              leading: Icon(Icons.person),
-              title: Text('My Profile'),
+            _drawerItem(
+              icon: Icons.person_rounded,
+              label: 'My Profile',
               onTap: () {
                 Navigator.pop(context);
-                // Switch to profile tab
                 _tabController.animateTo(1);
               },
             ),
-            ListTile(
-              leading: Icon(Icons.assignment_ind),
-              title: Text('Requests Received'),
+            _drawerItem(
+              icon: Icons.assignment_ind_rounded,
+              label: 'Requests Received',
               onTap: () {
                 Navigator.pop(context);
-                // Switch to requests tab
                 _tabController.animateTo(2);
               },
             ),
-            Divider(),
-            ListTile(
-              leading: Icon(Icons.logout),
-              title: Text('Logout'),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              child: Divider(color: const Color(0xFF6C3FD8).withOpacity(0.2), thickness: 1),
+            ),
+            _drawerItem(
+              icon: Icons.logout_rounded,
+              label: 'Logout',
+              isDestructive: true,
               onTap: () async {
                 await FirebaseAuth.instance.signOut();
                 // ignore: use_build_context_synchronously

@@ -259,12 +259,16 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: const Color(0xFF0A0A0F),
       appBar: AppBar(
+        backgroundColor: const Color(0xFF0A0A0F),
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           "Tutor Profile",
           style: GoogleFonts.poppins(
             fontWeight: FontWeight.w600,
+            color: Colors.white,
           ),
         ),
         actions: [
@@ -329,28 +333,42 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                         width: double.infinity,
                         padding: EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              // ignore: deprecated_member_use
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 10,
-                              offset: Offset(0, 5),
+                          color: const Color(0xFF13131F),
+                          border: Border(
+                            bottom: BorderSide(
+                              color: const Color(0xFF6C3FD8).withOpacity(0.25),
+                              width: 1,
                             ),
-                          ],
+                          ),
                         ),
                         child: Column(
                           children: [
                             // Profile Image
-                            CircleAvatar(
-                              radius: 60,
-                              backgroundColor: Colors.blue[100],
-                              backgroundImage: _tutorData!['profileImageUrl'] != null
-                                  ? NetworkImage(_tutorData!['profileImageUrl'])
-                                  : null,
-                              child: _tutorData!['profileImageUrl'] == null
-                                  ? Icon(Icons.person, size: 60, color: Colors.blue[800])
-                                  : null,
+                            Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: const Color(0xFF6C3FD8).withOpacity(0.6),
+                                  width: 2.5,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFF6C3FD8).withOpacity(0.3),
+                                    blurRadius: 20,
+                                    spreadRadius: 2,
+                                  ),
+                                ],
+                              ),
+                              child: CircleAvatar(
+                                radius: 60,
+                                backgroundColor: const Color(0xFF6C3FD8).withOpacity(0.2),
+                                backgroundImage: _tutorData!['profileImageUrl'] != null
+                                    ? NetworkImage(_tutorData!['profileImageUrl'])
+                                    : null,
+                                child: _tutorData!['profileImageUrl'] == null
+                                    ? const Icon(Icons.person, size: 60, color: Color(0xFFA78BFA))
+                                    : null,
+                              ),
                             ),
                             SizedBox(height: 16),
                             
@@ -360,6 +378,7 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                               style: GoogleFonts.poppins(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
+                                color: Colors.white,
                               ),
                             ),
                             
@@ -382,16 +401,12 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                         margin: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                         padding: EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              // ignore: deprecated_member_use
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 10,
-                              offset: Offset(0, 5),
-                            ),
-                          ],
+                          color: const Color(0xFF13131F),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: const Color(0xFF6C3FD8).withOpacity(0.25),
+                            width: 1,
+                          ),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -424,16 +439,12 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                         margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         padding: EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              // ignore: deprecated_member_use
-                              color: Colors.black.withOpacity(0.05),
-                              blurRadius: 10,
-                              offset: Offset(0, 5),
-                            ),
-                          ],
+                          color: const Color(0xFF13131F),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: const Color(0xFF6C3FD8).withOpacity(0.25),
+                            width: 1,
+                          ),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -444,7 +455,7 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                               'Education',
                               _tutorData!['education'] ?? 'Not specified',
                             ),
-                            Divider(),
+                            Divider(color: Color(0xFF6C3FD8), thickness: 0.2),
                             // Experience
                             _buildDetailItem(
                               Icons.work,
@@ -460,16 +471,12 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                         margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         padding: EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              // ignore: deprecated_member_use
-                              color: Colors.black.withOpacity(0.05),
-                              blurRadius: 10,
-                              offset: Offset(0, 5),
-                            ),
-                          ],
+                          color: const Color(0xFF13131F),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: const Color(0xFF6C3FD8).withOpacity(0.25),
+                            width: 1,
+                          ),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -479,6 +486,7 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                               style: GoogleFonts.poppins(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
+                                color: Colors.white,
                               ),
                             ),
                             SizedBox(height: 8),
@@ -487,6 +495,7 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                               style: GoogleFonts.poppins(
                                 fontSize: 14,
                                 height: 1.5,
+                                color: Colors.white60,
                               ),
                             ),
                           ],
@@ -508,12 +517,18 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                               _tutorData!['isAvailable'] == true
                                   ? 'Set as Unavailable'
                                   : 'Set as Available',
+                              style: const TextStyle(fontWeight: FontWeight.w700),
                             ),
                             style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(vertical: 12),
+                              padding: EdgeInsets.symmetric(vertical: 14),
                               backgroundColor: _tutorData!['isAvailable'] == true
-                                  ? Colors.orange
-                                  : Colors.green,
+                                  ? const Color(0xFFE65100)
+                                  : const Color(0xFF6C3FD8),
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              elevation: 0,
                             ),
                             onPressed: () async {
                               try {
@@ -541,7 +556,7 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: Colors.blue[700], size: 22),
+          Icon(icon, color: const Color(0xFF6C3FD8), size: 22),
           SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -551,7 +566,7 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                   label,
                   style: GoogleFonts.poppins(
                     fontSize: 14,
-                    color: Colors.grey[600],
+                    color: Colors.white38,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -560,6 +575,7 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                   value,
                   style: GoogleFonts.poppins(
                     fontSize: 16,
+                    color: Colors.white,
                   ),
                 ),
               ],
@@ -629,13 +645,14 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.star, color: Colors.amber),
+            Icon(Icons.star_rounded, color: Colors.amber),
             SizedBox(width: 4),
             Text(
               '${averageRating.toStringAsFixed(1)}',
               style: GoogleFonts.poppins(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
+                color: Colors.white,
               ),
             ),
             SizedBox(width: 4),
@@ -643,7 +660,7 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
               '($ratingCount ${ratingCount == 1 ? 'rating' : 'ratings'})',
               style: GoogleFonts.poppins(
                 fontSize: 14,
-                color: Colors.grey[600],
+                color: Colors.white38,
               ),
             ),
           ],
@@ -660,18 +677,19 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.blue.shade50,
+                    color: const Color(0xFF6C3FD8).withOpacity(0.15),
                     borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: const Color(0xFF6C3FD8).withOpacity(0.3)),
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.school_outlined, size: 16, color: Colors.blue[700]),
+                      const Icon(Icons.school_outlined, size: 16, color: Color(0xFFA78BFA)),
                       SizedBox(width: 4),
                       Text(
                         '$sessionCount ${sessionCount == 1 ? 'Session' : 'Sessions'}',
                         style: GoogleFonts.poppins(
                           fontSize: 12,
-                          color: Colors.blue[700],
+                          color: const Color(0xFFA78BFA),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -685,18 +703,19 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.green.shade50,
+                    color: const Color(0xFF6C3FD8).withOpacity(0.15),
                     borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: const Color(0xFF6C3FD8).withOpacity(0.3)),
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.people_outline, size: 16, color: Colors.green[700]),
+                      const Icon(Icons.people_outline, size: 16, color: Color(0xFFA78BFA)),
                       SizedBox(width: 4),
                       Text(
                         '$uniqueStudents ${uniqueStudents == 1 ? 'Student' : 'Students'}',
                         style: GoogleFonts.poppins(
                           fontSize: 12,
-                          color: Colors.green[700],
+                          color: const Color(0xFFA78BFA),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -729,6 +748,7 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
             style: GoogleFonts.poppins(
               fontSize: 18,
               fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
         ),
@@ -746,9 +766,16 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
             formattedDate = DateFormat('MMM d, yyyy').format(date);
           }
           
-          return Card(
+          return Container(
             margin: EdgeInsets.only(bottom: 10),
-            elevation: 1,
+            decoration: BoxDecoration(
+              color: const Color(0xFF13131F),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: const Color(0xFF6C3FD8).withOpacity(0.25),
+                width: 1,
+              ),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(
@@ -765,6 +792,7 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
+                            color: Colors.white,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -792,7 +820,7 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                     formattedDate,
                     style: GoogleFonts.poppins(
                       fontSize: 12,
-                      color: Colors.grey[600],
+                      color: Colors.white38,
                     ),
                   ),
                 ],

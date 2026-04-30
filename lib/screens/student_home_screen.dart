@@ -378,10 +378,10 @@ class _StudentHomeScreenState extends State<StudentHomeScreen>
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text('Last updated: ${_formatTime(_lastRequestsRefresh)}',
-                style: TextStyle(fontSize: 12, color: Colors.grey)),
+                style: const TextStyle(fontSize: 12, color: Colors.white30)),
             IconButton(
               onPressed: _loadRequests,
-              icon: Icon(Icons.refresh, size: 16),
+              icon: const Icon(Icons.refresh_rounded, size: 16, color: Color(0xFF6C3FD8)),
               tooltip: 'Refresh requests',
             ),
           ],
@@ -444,17 +444,17 @@ class _StudentHomeScreenState extends State<StudentHomeScreen>
 
         switch (status) {
           case 'accepted':
-            cardColor = Colors.green.shade50;
-            statusIcon = Icons.check_circle;
+            cardColor = const Color(0xFF0D1F14);
+            statusIcon = Icons.check_circle_rounded;
             break;
           case 'rejected':
-            cardColor = Colors.red.shade50;
-            statusIcon = Icons.cancel;
+            cardColor = const Color(0xFF1F0D0D);
+            statusIcon = Icons.cancel_rounded;
             break;
           case 'pending':
           default:
-            cardColor = Colors.orange.shade50;
-            statusIcon = Icons.hourglass_empty;
+            cardColor = const Color(0xFF13131F);
+            statusIcon = Icons.hourglass_empty_rounded;
             break;
         }
 
@@ -472,60 +472,61 @@ class _StudentHomeScreenState extends State<StudentHomeScreen>
               profileImageUrl = tutorData?['profileImageUrl'];
             }
 
-            return Card(
-              color: cardColor,
-              margin: EdgeInsets.only(bottom: 8),
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: profileImageUrl != null
-                      ? NetworkImage(profileImageUrl)
-                      : null,
-                  child: profileImageUrl == null ? Text(tutorName[0]) : null,
+            return Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              decoration: BoxDecoration(
+                color: cardColor,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: status == 'accepted'
+                      ? Colors.green.withOpacity(0.3)
+                      : status == 'rejected'
+                          ? Colors.red.withOpacity(0.3)
+                          : const Color(0xFF6C3FD8).withOpacity(0.25),
+                  width: 1,
                 ),
-                title: Text(tutorName),
+              ),
+              child: ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                leading: CircleAvatar(
+                  backgroundColor: const Color(0xFF6C3FD8).withOpacity(0.2),
+                  backgroundImage: profileImageUrl != null ? NetworkImage(profileImageUrl) : null,
+                  child: profileImageUrl == null
+                      ? Text(tutorName[0], style: const TextStyle(color: Color(0xFFA78BFA), fontWeight: FontWeight.w700))
+                      : null,
+                ),
+                title: Text(tutorName, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('$subject - $sessionDate at $sessionTime'),
+                    const SizedBox(height: 4),
+                    Text('$subject · $sessionDate at $sessionTime', style: const TextStyle(color: Colors.white54, fontSize: 12)),
+                    const SizedBox(height: 4),
                     Row(
                       children: [
-                        Icon(statusIcon, size: 14),
-                        SizedBox(width: 4),
-                        Text(capitalizeString(status),
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        Icon(statusIcon, size: 14, color: status == 'accepted' ? Colors.greenAccent : status == 'rejected' ? Colors.redAccent : const Color(0xFFA78BFA)),
+                        const SizedBox(width: 4),
+                        Text(capitalizeString(status), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12, color: status == 'accepted' ? Colors.greenAccent : status == 'rejected' ? Colors.redAccent : const Color(0xFFA78BFA))),
                       ],
                     ),
-                    // Show a note for accepted requests pointing to My Chats
                     if (status == 'accepted')
                       Padding(
                         padding: const EdgeInsets.only(top: 4.0),
                         child: Row(
-                          children: [
-                            Icon(Icons.info_outline,
-                                size: 14, color: Colors.blue),
+                          children: const [
+                            Icon(Icons.info_outline_rounded, size: 13, color: Color(0xFFA78BFA)),
                             SizedBox(width: 4),
-                            Text(
-                              'Chat available in Messages tab',
-                              style: TextStyle(
-                                color: Colors.blue,
-                                fontSize: 12,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
+                            Text('Chat available in Messages tab', style: TextStyle(color: Color(0xFFA78BFA), fontSize: 12, fontStyle: FontStyle.italic)),
                           ],
                         ),
                       ),
                   ],
                 ),
-                // Remove message button for accepted requests
                 trailing: status == 'accepted'
                     ? IconButton(
-                        icon: Icon(Icons.tab, color: Colors.blue),
+                        icon: const Icon(Icons.tab_rounded, color: Color(0xFF6C3FD8)),
                         tooltip: 'Go to Messages tab',
-                        onPressed: () {
-                          // Switch to the chats tab
-                          _tabController.animateTo(0);
-                        },
+                        onPressed: () => _tabController.animateTo(0),
                       )
                     : null,
               ),
@@ -546,22 +547,17 @@ class _StudentHomeScreenState extends State<StudentHomeScreen>
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
               'My Chats',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white70),
             ),
             Row(
               children: [
                 Text('Last updated: ${_formatTime(_lastChatsRefresh)}',
-                    style: TextStyle(fontSize: 12, color: Colors.grey)),
+                    style: const TextStyle(fontSize: 12, color: Colors.white30)),
                 IconButton(
-                  icon: Icon(Icons.refresh, color: Colors.blue),
-                  onPressed: () {
-                    if (kDebugMode) {
-                      print("Manual refresh of chats requested");
-                    }
-                    _loadChats();
-                  },
+                  icon: const Icon(Icons.refresh_rounded, color: Color(0xFF6C3FD8)),
+                  onPressed: () { _loadChats(); },
                   tooltip: 'Refresh chats',
                 ),
               ],
@@ -600,12 +596,10 @@ class _StudentHomeScreenState extends State<StudentHomeScreen>
       return Center(
         child: Column(
           children: [
-            Icon(Icons.chat_bubble_outline, size: 48, color: Colors.blue),
-            SizedBox(height: 8),
-            Text('No active chats',
-                style: TextStyle(fontSize: 16, color: Colors.grey)),
-            Text('Search for tutors to start chatting',
-                style: TextStyle(color: Colors.grey)),
+            const Icon(Icons.chat_bubble_outline_rounded, size: 48, color: Colors.white38),
+            const SizedBox(height: 8),
+            const Text('No active chats', style: TextStyle(fontSize: 16, color: Colors.white38)),
+            const Text('Search for tutors to start chatting', style: TextStyle(color: Colors.white24)),
           ],
         ),
       );
@@ -662,28 +656,34 @@ class _StudentHomeScreenState extends State<StudentHomeScreen>
           final String lastMessage =
               chatData['lastMessage'] as String? ?? 'Start chatting...';
 
-          return Card(
-            margin: EdgeInsets.only(bottom: 8),
+          return Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            decoration: BoxDecoration(
+              color: const Color(0xFF13131F),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: const Color(0xFF6C3FD8).withOpacity(0.25), width: 1),
+            ),
             child: ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               leading: CircleAvatar(
-                backgroundColor: Colors.blue[100],
+                radius: 24,
+                backgroundColor: const Color(0xFF6C3FD8).withOpacity(0.3),
                 child: Text(
-                  otherParticipantName.isNotEmpty
-                      ? otherParticipantName[0].toUpperCase()
-                      : '?',
-                  style: TextStyle(color: Colors.blue[800]),
+                  otherParticipantName.isNotEmpty ? otherParticipantName[0].toUpperCase() : '?',
+                  style: const TextStyle(color: Color(0xFFA78BFA), fontWeight: FontWeight.w700),
                 ),
               ),
               title: Text(
                 otherParticipantName,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15),
               ),
               subtitle: Text(
                 lastMessage,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
+                style: const TextStyle(color: Colors.white38, fontSize: 13),
               ),
-              trailing: Icon(Icons.arrow_forward_ios, size: 16),
+              trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: Color(0xFF6C3FD8)),
               onTap: () {
                 Navigator.push(
                   context,
@@ -801,103 +801,133 @@ class _StudentHomeScreenState extends State<StudentHomeScreen>
     );
   }
 
+  Widget _drawerItem({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    bool isDestructive = false,
+  }) {
+    final color = isDestructive ? Colors.redAccent : const Color(0xFFA78BFA);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: onTap,
+          splashColor: const Color(0xFF6C3FD8).withOpacity(0.15),
+          highlightColor: const Color(0xFF6C3FD8).withOpacity(0.08),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            child: Row(
+              children: [
+                Icon(icon, color: color, size: 22),
+                const SizedBox(width: 16),
+                Text(label, style: TextStyle(color: isDestructive ? Colors.redAccent : Colors.white, fontSize: 15, fontWeight: FontWeight.w500)),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF0A0A0F),
       appBar: AppBar(
-        title: const Text('Student Dashboard'),
+        backgroundColor: const Color(0xFF0A0A0F),
+        elevation: 0,
+        title: const Text(
+          'Student Dashboard',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 20),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
         bottom: TabBar(
           controller: _tabController,
-          tabs: [
-            Tab(text: 'My Chats', icon: Icon(Icons.chat)),
-            Tab(text: 'My Requests', icon: Icon(Icons.history)),
-            Tab(text: 'Tutor Suggestions', icon: Icon(Icons.recommend)),
+          indicatorColor: const Color(0xFF6C3FD8),
+          indicatorWeight: 3,
+          labelColor: const Color(0xFF6C3FD8),
+          unselectedLabelColor: Colors.white38,
+          labelStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+          tabs: const [
+            Tab(text: 'My Chats', icon: Icon(Icons.chat_rounded, size: 20)),
+            Tab(text: 'My Requests', icon: Icon(Icons.history_rounded, size: 20)),
+            Tab(text: 'Tutor Suggestions', icon: Icon(Icons.recommend_rounded, size: 20)),
           ],
         ),
         actions: [
-          // Add a refresh button to the app bar
           IconButton(
-            icon: Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh_rounded, color: Colors.white54),
             onPressed: _refreshAll,
             tooltip: 'Refresh All',
           ),
         ],
       ),
       drawer: Drawer(
+        backgroundColor: const Color(0xFF0A0A0F),
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 56, 20, 24),
+              decoration: const BoxDecoration(
+                color: Color(0xFF13131F),
+                border: Border(
+                  bottom: BorderSide(color: Color(0xFF6C3FD8), width: 0.5),
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: 30,
-                    child: Icon(Icons.person, size: 40, color: Colors.blue),
+                  Container(
+                    padding: const EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: const Color(0xFF6C3FD8), width: 2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF6C3FD8).withOpacity(0.35),
+                          blurRadius: 12,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                    ),
+                    child: const CircleAvatar(
+                      backgroundColor: Color(0xFF1E1340),
+                      radius: 30,
+                      child: Icon(Icons.person_rounded, size: 32, color: Color(0xFFA78BFA)),
+                    ),
                   ),
-                  SizedBox(height: 10),
-                  Text(
+                  const SizedBox(height: 14),
+                  const Text(
                     'Student Menu',
-                    style: TextStyle(color: Colors.white, fontSize: 24),
+                    style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w700),
                   ),
+                  const SizedBox(height: 2),
                   Text(
                     FirebaseAuth.instance.currentUser?.email ?? 'Student',
-                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                    style: const TextStyle(color: Colors.white38, fontSize: 13),
                   ),
                 ],
               ),
             ),
-            ListTile(
-              leading: Icon(Icons.chat),
-              title: Text('Messages'),
-              onTap: () {
-                Navigator.pop(context);
-                // Switch to messages tab
-                _tabController.animateTo(0);
-              },
+            const SizedBox(height: 12),
+            _drawerItem(icon: Icons.chat_rounded, label: 'Messages', onTap: () { Navigator.pop(context); _tabController.animateTo(0); }),
+            _drawerItem(icon: Icons.person_rounded, label: 'User Profile', onTap: () { Navigator.pop(context); Navigator.pushNamed(context, '/studentProfile'); }),
+            _drawerItem(icon: Icons.search_rounded, label: 'Search Tutors', onTap: () { Navigator.pop(context); _showSearchDialog(context); }),
+            _drawerItem(icon: Icons.assignment_rounded, label: 'My Requests', onTap: () { Navigator.pop(context); _tabController.animateTo(1); }),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              child: Divider(color: const Color(0xFF6C3FD8).withOpacity(0.2), thickness: 1),
             ),
-            ListTile(
-              leading: Icon(Icons.person),
-              title: Text('User Profile'),
-              onTap: () {
-                Navigator.pop(context);
-                // Navigate to the student profile screen
-                Navigator.pushNamed(context, '/studentProfile');
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.search),
-              title: Text('Search Tutors'),
-              onTap: () {
-                Navigator.pop(context);
-                // Navigate to a search input screen instead of results directly
-                _showSearchDialog(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.assignment),
-              title: Text('My Requests'),
-              onTap: () {
-                Navigator.pop(context);
-                // Switch to requests tab
-                _tabController.animateTo(1);
-              },
-            ),
-            Divider(),
-            ListTile(
-              leading: Icon(Icons.logout),
-              title: Text('Logout'),
-              onTap: () async {
-                await FirebaseAuth.instance.signOut();
-                // ignore: use_build_context_synchronously
-                Navigator.pushReplacementNamed(context, '/roleSelection');
-              },
-            ),
+            _drawerItem(icon: Icons.logout_rounded, label: 'Logout', isDestructive: true, onTap: () async {
+              await FirebaseAuth.instance.signOut();
+              // ignore: use_build_context_synchronously
+              Navigator.pushReplacementNamed(context, '/roleSelection');
+            }),
           ],
         ),
       ),
@@ -932,11 +962,11 @@ class _StudentHomeScreenState extends State<StudentHomeScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'My Chats',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildMyChatsSection(context),
             SizedBox(height: 20),
 
@@ -950,40 +980,37 @@ class _StudentHomeScreenState extends State<StudentHomeScreen>
 
   // Build the "Find a Tutor" card that appears when no chats exist
   Widget _buildFindTutorCard() {
-    return Card(
-      margin: EdgeInsets.only(bottom: 20),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Icon(Icons.search, size: 48, color: Colors.blue),
-            SizedBox(height: 16),
-            Text(
-              'Find a Tutor',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+    return Container(
+      margin: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: const Color(0xFF13131F),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFF6C3FD8).withOpacity(0.25)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Icon(Icons.search_rounded, size: 48, color: Color(0xFFA78BFA)),
+          const SizedBox(height: 16),
+          const Text('Find a Tutor', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white), textAlign: TextAlign.center),
+          const SizedBox(height: 8),
+          const Text('Connect with qualified tutors to help with your studies', textAlign: TextAlign.center, style: TextStyle(color: Colors.white54)),
+          const SizedBox(height: 20),
+          ElevatedButton.icon(
+            onPressed: () => _showSearchDialog(context),
+            icon: const Icon(Icons.search_rounded),
+            label: const Text('Search for Tutors'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF6C3FD8),
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              elevation: 0,
+              shadowColor: const Color(0xFF6C3FD8).withOpacity(0.45),
             ),
-            SizedBox(height: 8),
-            Text(
-              'Connect with qualified tutors to help with your studies',
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: () {
-                // Use the same search dialog as the menu item
-                _showSearchDialog(context);
-              },
-              icon: Icon(Icons.search),
-              label: Text('Search for Tutors'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                foregroundColor: Colors.white,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -998,11 +1025,11 @@ class _StudentHomeScreenState extends State<StudentHomeScreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Only show the title without any Create Request button
-            Text(
+            const Text(
               'My Requests',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             // Just show the requests section directly
             Container(
               key: _requestsKey,
@@ -1023,9 +1050,9 @@ class _StudentHomeScreenState extends State<StudentHomeScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Suggested Tutors',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white),
             ),
             SizedBox(height: 20),
             FutureBuilder<QuerySnapshot>(
@@ -1043,11 +1070,10 @@ class _StudentHomeScreenState extends State<StudentHomeScreen>
                 if (tutors.isEmpty) {
                   return Center(
                     child: Column(
-                      children: [
-                        Icon(Icons.person_search, size: 48, color: Colors.grey),
+                      children: const [
+                        Icon(Icons.person_search_rounded, size: 48, color: Colors.white38),
                         SizedBox(height: 8),
-                        Text('No tutors available',
-                            style: TextStyle(color: Colors.grey)),
+                        Text('No tutors available', style: TextStyle(color: Colors.white38)),
                       ],
                     ),
                   );
@@ -1077,97 +1103,72 @@ class _StudentHomeScreenState extends State<StudentHomeScreen>
                         'No name';
                     final rating = tutorData['rating']?.toDouble();
 
-                    return Card(
-                      elevation: 2,
-                      margin: EdgeInsets.symmetric(vertical: 8),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: Colors.blue[100],
-                          child: Text(
-                            tutorName.substring(0, 1).toUpperCase(),
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.blue[900],
-                            ),
-                          ),
-                        ),
-                        title: Row(
+                    return Container(
+                      margin: const EdgeInsets.symmetric(vertical: 6),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF13131F),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: const Color(0xFF6C3FD8).withOpacity(0.25), width: 1),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
                           children: [
-                            Expanded(
+                            CircleAvatar(
+                              radius: 24,
+                              backgroundColor: const Color(0xFF6C3FD8).withOpacity(0.2),
                               child: Text(
-                                tutorName,
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                tutorName.substring(0, 1).toUpperCase(),
+                                style: const TextStyle(fontSize: 18, color: Color(0xFFA78BFA), fontWeight: FontWeight.w700),
                               ),
                             ),
-                            // Show rating or "New" badge
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: rating != null
-                                    ? Colors.amber.shade100
-                                    : Colors.grey.shade100,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Icon(
-                                    rating != null
-                                        ? Icons.star
-                                        : Icons.new_releases,
-                                    size: 16,
-                                    color: rating != null
-                                        ? Colors.amber
-                                        : Colors.grey,
+                                  Row(
+                                    children: [
+                                      Expanded(child: Text(tutorName, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15))),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                        decoration: BoxDecoration(
+                                          color: rating != null ? Colors.amber.withOpacity(0.15) : const Color(0xFF6C3FD8).withOpacity(0.15),
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(rating != null ? Icons.star_rounded : Icons.new_releases_rounded, size: 14, color: rating != null ? Colors.amber : const Color(0xFFA78BFA)),
+                                            const SizedBox(width: 3),
+                                            Text(rating != null ? rating.toStringAsFixed(1) : 'New', style: TextStyle(color: rating != null ? Colors.amber : const Color(0xFFA78BFA), fontWeight: FontWeight.w700, fontSize: 12)),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    rating != null
-                                        ? rating.toStringAsFixed(1)
-                                        : 'New',
-                                    style: TextStyle(
-                                      color: rating != null
-                                          ? Colors.amber[900]
-                                          : Colors.grey[800],
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                                  const SizedBox(height: 3),
+                                  Text(tutorData['email'] ?? 'No email', style: const TextStyle(color: Colors.white38, fontSize: 12)),
+                                  if (tutorData['subjects'] != null)
+                                    Text('Subjects: ${(tutorData['subjects'] as List).join(', ')}', style: const TextStyle(color: Colors.white54, fontSize: 12)),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(tutorData['email'] ?? 'No email'),
-                            if (tutorData['subjects'] != null)
-                              Text(
-                                  'Subjects: ${(tutorData['subjects'] as List).join(', ')}'),
-                          ],
-                        ),
-                        trailing: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => TutorDetailsScreen(
-                                  tutor: {
-                                    ...tutorData,
-                                    'id': tutorDoc
-                                        .id, // Add the tutor's document ID
-                                  },
-                                ),
+                            const SizedBox(width: 8),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => TutorDetailsScreen(tutor: {...tutorData, 'id': tutorDoc.id})));
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF6C3FD8),
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                elevation: 0,
                               ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue.shade700,
-                            foregroundColor: Colors.white,
-                            padding: EdgeInsets.symmetric(horizontal: 16),
-                          ),
-                          child: Text('View Profile'),
+                              child: const Text('View', style: TextStyle(fontSize: 13)),
+                            ),
+                          ],
                         ),
                       ),
                     );

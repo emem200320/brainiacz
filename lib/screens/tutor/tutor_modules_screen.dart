@@ -68,41 +68,25 @@ class _ModuleSectionState extends State<ModuleSection> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Edit Module'),
+        backgroundColor: const Color(0xFF13131F),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('Edit Module', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(
-                controller: editSubjectController,
-                decoration: InputDecoration(
-                  labelText: 'Subject',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 16),
-              TextField(
-                controller: editLevelController,
-                decoration: InputDecoration(
-                  labelText: 'Year/Grade/Level',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 16),
-              TextField(
-                controller: editLinkController,
-                decoration: InputDecoration(
-                  labelText: 'Module Link',
-                  border: OutlineInputBorder(),
-                ),
-              ),
+              _darkTextField(editSubjectController, 'Subject', Icons.subject_rounded),
+              const SizedBox(height: 16),
+              _darkTextField(editLevelController, 'Year/Grade/Level', Icons.grade_rounded),
+              const SizedBox(height: 16),
+              _darkTextField(editLinkController, 'Module Link', Icons.link_rounded),
             ],
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'),
+            child: const Text('Cancel', style: TextStyle(color: Colors.white38)),
           ),
           TextButton(
             onPressed: () async {
@@ -129,6 +113,31 @@ class _ModuleSectionState extends State<ModuleSection> {
       ),
     );
   }
+  Widget _darkTextField(TextEditingController controller, String label, IconData icon) {
+    return TextField(
+      controller: controller,
+      style: const TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(color: Colors.white54),
+        prefixIcon: Icon(icon, color: const Color(0xFF6C3FD8), size: 20),
+        filled: true,
+        fillColor: const Color(0xFF0A0A0F),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: const Color(0xFF6C3FD8).withOpacity(0.25)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: const Color(0xFF6C3FD8).withOpacity(0.25)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFF6C3FD8), width: 1.5),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,8 +148,15 @@ class _ModuleSectionState extends State<ModuleSection> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Add Module Form
-            Card(
-              elevation: 4,
+            Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFF13131F),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: const Color(0xFF6C3FD8).withOpacity(0.25),
+                  width: 1,
+                ),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Form(
@@ -148,19 +164,35 @@ class _ModuleSectionState extends State<ModuleSection> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text(
+                      const Text(
                         'Add New Module',
                         style: TextStyle(
                           fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
                         ),
                       ),
-                      SizedBox(height: 16),
                       TextFormField(
                         controller: _subjectController,
+                        style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           labelText: 'Subject',
-                          border: OutlineInputBorder(),
+                          labelStyle: const TextStyle(color: Colors.white54),
+                          prefixIcon: const Icon(Icons.subject_rounded, color: Color(0xFF6C3FD8), size: 20),
+                          filled: true,
+                          fillColor: const Color(0xFF0A0A0F),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: const Color(0xFF6C3FD8).withOpacity(0.25)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: const Color(0xFF6C3FD8).withOpacity(0.25)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Color(0xFF6C3FD8), width: 1.5),
+                          ),
                         ),
                         validator: (value) => value?.isEmpty ?? true
                             ? 'Please enter a subject'
@@ -169,9 +201,25 @@ class _ModuleSectionState extends State<ModuleSection> {
                       SizedBox(height: 16),
                       TextFormField(
                         controller: _levelController,
+                        style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           labelText: 'Year/Grade/Level',
-                          border: OutlineInputBorder(),
+                          labelStyle: const TextStyle(color: Colors.white54),
+                          prefixIcon: const Icon(Icons.grade_rounded, color: Color(0xFF6C3FD8), size: 20),
+                          filled: true,
+                          fillColor: const Color(0xFF0A0A0F),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: const Color(0xFF6C3FD8).withOpacity(0.25)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: const Color(0xFF6C3FD8).withOpacity(0.25)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Color(0xFF6C3FD8), width: 1.5),
+                          ),
                         ),
                         validator: (value) => value?.isEmpty ?? true
                             ? 'Please enter a level'
@@ -180,21 +228,59 @@ class _ModuleSectionState extends State<ModuleSection> {
                       SizedBox(height: 16),
                       TextFormField(
                         controller: _linkController,
+                        style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           labelText: 'Module Link (Google Drive)',
-                          border: OutlineInputBorder(),
+                          labelStyle: const TextStyle(color: Colors.white54),
                           hintText: 'Enter your Google Drive link',
+                          hintStyle: TextStyle(color: Colors.white.withOpacity(0.2)),
+                          prefixIcon: const Icon(Icons.link_rounded, color: Color(0xFF6C3FD8), size: 20),
+                          filled: true,
+                          fillColor: const Color(0xFF0A0A0F),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: const Color(0xFF6C3FD8).withOpacity(0.25)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: const Color(0xFF6C3FD8).withOpacity(0.25)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Color(0xFF6C3FD8), width: 1.5),
+                          ),
                         ),
                         validator: (value) => value?.isEmpty ?? true
                             ? 'Please enter a link'
                             : null,
                       ),
                       SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: _addModule,
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Text('Add Module'),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF6C3FD8).withOpacity(0.4),
+                              blurRadius: 16,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: ElevatedButton(
+                          onPressed: _addModule,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF6C3FD8),
+                            foregroundColor: Colors.white,
+                            minimumSize: const Size(double.infinity, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 0,
+                          ),
+                          child: const Text(
+                            'Add Module',
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                          ),
                         ),
                       ),
                     ],
@@ -205,11 +291,12 @@ class _ModuleSectionState extends State<ModuleSection> {
             SizedBox(height: 24),
 
             // Modules List
-            Text(
+            const Text(
               'My Modules',
               style: TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
               ),
             ),
             SizedBox(height: 16),
@@ -228,7 +315,10 @@ class _ModuleSectionState extends State<ModuleSection> {
 
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return Center(
-                    child: Text('No modules added yet'),
+                    child: Text(
+                      'No modules added yet',
+                      style: TextStyle(color: Colors.white38, fontSize: 14),
+                    ),
                   );
                 }
 
@@ -240,49 +330,76 @@ class _ModuleSectionState extends State<ModuleSection> {
                     final module = snapshot.data!.docs[index].data()
                         as Map<String, dynamic>;
 
-                    return Card(
-                      margin: EdgeInsets.only(bottom: 16),
-                      child: ExpansionTile(
-                        title: Text(
-                          module['subject'],
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF13131F),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: const Color(0xFF6C3FD8).withOpacity(0.25),
+                          width: 1,
                         ),
-                        subtitle: Text(module['level']),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.edit, color: Colors.blue),
-                              onPressed: () => _showEditDialog(
-                                snapshot.data!.docs[index].id,
-                                module,
-                              ),
-                            ),
-                            Icon(Icons.expand_more),
-                          ],
+                      ),
+                      child: Theme(
+                        data: Theme.of(context).copyWith(
+                          dividerColor: Colors.transparent,
                         ),
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Module Link:'),
-                                SizedBox(height: 8),
-                                InkWell(
-                                  onTap: () => _launchURL(module['link']),
-                                  child: Text(
-                                    module['link'],
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                        child: ExpansionTile(
+                          iconColor: const Color(0xFF6C3FD8),
+                          collapsedIconColor: Colors.white38,
+                          title: Text(
+                            module['subject'],
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
                             ),
                           ),
-                        ],
+                          subtitle: Text(
+                            module['level'],
+                            style: const TextStyle(color: Colors.white38, fontSize: 12),
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit_rounded, color: Color(0xFF6C3FD8), size: 20),
+                                onPressed: () => _showEditDialog(
+                                  snapshot.data!.docs[index].id,
+                                  module,
+                                ),
+                              ),
+                              const Icon(Icons.expand_more, color: Colors.white38),
+                            ],
+                          ),
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Divider(color: Color(0xFF6C3FD8), thickness: 0.2),
+                                  const SizedBox(height: 8),
+                                  const Text(
+                                    'Module Link:',
+                                    style: TextStyle(color: Colors.white54, fontSize: 12),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  GestureDetector(
+                                    onTap: () => _launchURL(module['link']),
+                                    child: Text(
+                                      module['link'],
+                                      style: const TextStyle(
+                                        color: Color(0xFFA78BFA),
+                                        decoration: TextDecoration.underline,
+                                        decorationColor: Color(0xFFA78BFA),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
