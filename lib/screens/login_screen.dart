@@ -96,7 +96,9 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
-    final roleLabel = widget.role[0].toUpperCase() + widget.role.substring(1);
+    final roleLabel = widget.role.isNotEmpty
+        ? widget.role[0].toUpperCase() + widget.role.substring(1)
+        : 'User';
 
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0F),
@@ -126,11 +128,28 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 32),
 
               // ── Logo ──
-              ClipRRect(
-                borderRadius: BorderRadius.circular(24),
-                child: Image.asset(
-                  'assets/brainiacz logo.png',
-                  height: 140,
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF6C3FD8),
+                  borderRadius: BorderRadius.circular(22),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF6C3FD8).withOpacity(0.45),
+                      blurRadius: 24,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                ),
+                child: Icon(
+                  widget.role == 'tutor'
+                      ? Icons.cast_for_education_rounded
+                      : widget.role == 'admin'
+                          ? Icons.admin_panel_settings_rounded
+                          : Icons.school_rounded,
+                  color: Colors.white,
+                  size: 40,
                 ),
               ),
 

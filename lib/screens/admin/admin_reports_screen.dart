@@ -32,35 +32,47 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> with SingleTick
     bool? confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Ban User'),
+        backgroundColor: const Color(0xFF13131F),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('Ban User', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Are you sure you want to ban $userName?'),
-            SizedBox(height: 12),
-            Text('This will prevent the user from logging in and using the platform.'),
-            SizedBox(height: 16),
+            Text('Are you sure you want to ban $userName?', style: const TextStyle(color: Colors.white70)),
+            const SizedBox(height: 8),
+            const Text('This will prevent the user from logging in.', style: TextStyle(color: Colors.white38, fontSize: 13)),
+            const SizedBox(height: 16),
             TextField(
               controller: _banReasonController,
+              style: const TextStyle(color: Colors.white),
+              maxLines: 2,
               decoration: InputDecoration(
                 labelText: 'Ban Reason',
-                hintText: 'Provide a reason for banning this user',
-                border: OutlineInputBorder(),
+                labelStyle: const TextStyle(color: Colors.white54),
+                hintText: 'Provide a reason',
+                hintStyle: const TextStyle(color: Colors.white24),
+                filled: true,
+                fillColor: const Color(0xFF0A0A0F),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: const Color(0xFF6C3FD8).withOpacity(0.25))),
+                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFF6C3FD8), width: 1.5)),
               ),
-              maxLines: 2,
             ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text('Cancel'),
+            child: const Text('Cancel', style: TextStyle(color: Colors.white38)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: Text('Confirm Ban'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.redAccent,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              elevation: 0,
+            ),
+            child: const Text('Confirm Ban'),
           ),
         ],
       ),
@@ -123,9 +135,6 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> with SingleTick
   }
 
   Future<void> _viewUserDetails(String userId, String userName, String role) async {
-    setState(() {
-    });
-
     try {
       // Fetch the user document
       final userDoc = await _firestore.collection('users').doc(userId).get();
@@ -144,35 +153,24 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> with SingleTick
         // ignore: use_build_context_synchronously
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('User Details'),
+          backgroundColor: const Color(0xFF13131F),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Text('User Details', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                // User basic info
-                ListTile(
-                  leading: Icon(Icons.person),
-                  title: Text('Name'),
-                  subtitle: Text(userData['name'] ?? userData['fullName'] ?? userData['displayName'] ?? userName),
-                ),
-                ListTile(
-                  leading: Icon(Icons.email),
-                  title: Text('Email'),
-                  subtitle: Text(userData['email'] ?? 'Not provided'),
-                ),
-                ListTile(
-                  leading: Icon(Icons.badge),
-                  title: Text('Role'),
-                  subtitle: Text(userData['role'] ?? 'Unknown'),
-                ),
+                _detailRow(Icons.person_rounded, 'Name', userData['name'] ?? userData['fullName'] ?? userData['displayName'] ?? userName),
+                _detailRow(Icons.email_rounded, 'Email', userData['email'] ?? 'Not provided'),
+                _detailRow(Icons.badge_rounded, 'Role', userData['role'] ?? 'Unknown'),
               ],
             ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Close'),
+              child: const Text('Close', style: TextStyle(color: Color(0xFFA78BFA))),
             ),
           ],
         ),
@@ -183,19 +181,29 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> with SingleTick
         SnackBar(content: Text('Error loading user details: $e')),
       );
     } finally {
-      setState(() {
-      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF0A0A0F),
       appBar: AppBar(
-        title: Text('Reported Users'),
+        backgroundColor: const Color(0xFF0A0A0F),
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text(
+          'Reported Users',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 20),
+        ),
         bottom: TabBar(
           controller: _tabController,
-          tabs: [
+          indicatorColor: const Color(0xFF6C3FD8),
+          indicatorWeight: 3,
+          labelColor: const Color(0xFF6C3FD8),
+          unselectedLabelColor: Colors.white38,
+          labelStyle: const TextStyle(fontWeight: FontWeight.w600),
+          tabs: const [
             Tab(text: 'Students'),
             Tab(text: 'Tutors'),
           ],
@@ -209,6 +217,25 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> with SingleTick
           
           // Reported Tutors Tab
           _buildReportedUsersList('tutor'),
+        ],
+      ),
+    );
+  }
+
+  Widget _detailRow(IconData icon, String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        children: [
+          Icon(icon, color: const Color(0xFFA78BFA), size: 18),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(label, style: const TextStyle(color: Colors.white38, fontSize: 11)),
+              Text(value, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+            ],
+          ),
         ],
       ),
     );
@@ -231,11 +258,11 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> with SingleTick
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.check_circle_outline, size: 64, color: Colors.green),
-                SizedBox(height: 16),
+                const Icon(Icons.check_circle_rounded, size: 64, color: Colors.white24),
+                const SizedBox(height: 16),
                 Text(
                   'No reported ${role}s',
-                  style: TextStyle(fontSize: 18),
+                  style: const TextStyle(fontSize: 16, color: Colors.white38),
                 ),
               ],
             ),
@@ -265,80 +292,109 @@ class _AdminReportsScreenState extends State<AdminReportsScreen> with SingleTick
             final userName = firstReport['reportedUserName'] ?? 'Unknown User';
             final needsAction = reportCount >= 5;
 
-            return Card(
-              margin: EdgeInsets.only(bottom: 16),
+            return Container(
+              margin: const EdgeInsets.only(bottom: 14),
+              decoration: BoxDecoration(
+                color: const Color(0xFF13131F),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: needsAction
+                      ? Colors.redAccent.withOpacity(0.4)
+                      : const Color(0xFF6C3FD8).withOpacity(0.25),
+                ),
+              ),
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
                         CircleAvatar(
-                          backgroundColor: needsAction ? Colors.red : Colors.blue,
-                          child: Text(userName[0]),
+                          backgroundColor: needsAction
+                              ? Colors.redAccent.withOpacity(0.2)
+                              : const Color(0xFF6C3FD8).withOpacity(0.2),
+                          child: Text(
+                            userName[0],
+                            style: TextStyle(
+                              color: needsAction ? Colors.redAccent : const Color(0xFFA78BFA),
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
                         ),
-                        SizedBox(width: 12),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                userName,
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                              ),
+                              Text(userName, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 15)),
                               Text(
                                 '$reportCount ${reportCount == 1 ? 'report' : 'reports'}',
                                 style: TextStyle(
-                                  color: needsAction ? Colors.red : Colors.grey,
-                                  fontWeight: needsAction ? FontWeight.bold : FontWeight.normal,
+                                  color: needsAction ? Colors.redAccent : Colors.white38,
+                                  fontSize: 12,
+                                  fontWeight: needsAction ? FontWeight.w600 : FontWeight.normal,
                                 ),
                               ),
                             ],
                           ),
                         ),
                         if (needsAction)
-                          Chip(
-                            label: Text('Action Required'),
-                            backgroundColor: Colors.red[100],
-                            labelStyle: TextStyle(color: Colors.red),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: Colors.redAccent.withOpacity(0.15),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Text('Action Required', style: TextStyle(color: Colors.redAccent, fontSize: 11, fontWeight: FontWeight.w600)),
                           ),
                       ],
                     ),
-                    SizedBox(height: 16),
-                    Text(
-                      'Recent Reports:',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 14),
+                    Divider(color: const Color(0xFF6C3FD8).withOpacity(0.15), height: 1),
+                    const SizedBox(height: 12),
+                    const Text('Recent Reports:', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w600, fontSize: 13)),
+                    const SizedBox(height: 8),
                     ...reports.take(3).map((report) {
                       final data = report.data() as Map<String, dynamic>;
                       return Padding(
-                        padding: EdgeInsets.only(bottom: 8),
-                        child: Text('• ${data['reason'] ?? 'No reason provided'}'),
+                        padding: const EdgeInsets.only(bottom: 6),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('• ', style: TextStyle(color: Color(0xFFA78BFA))),
+                            Expanded(child: Text(data['reason'] ?? 'No reason provided', style: const TextStyle(color: Colors.white54, fontSize: 13))),
+                          ],
+                        ),
                       );
                     }),
                     if (reports.length > 3)
-                      Text('... and ${reports.length - 3} more'),
-                    SizedBox(height: 16),
+                      Text('... and ${reports.length - 3} more', style: const TextStyle(color: Colors.white24, fontSize: 12)),
+                    const SizedBox(height: 14),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         OutlinedButton(
-                          onPressed: () {
-                            _viewUserDetails(userId, userName, role);
-                          },
-                          child: Text('View Details'),
-                        ),
-                        SizedBox(width: 8),
-                        ElevatedButton(
-                          onPressed: needsAction
-                              ? () => _banUser(userId, userName)
-                              : null,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: needsAction ? Colors.red : Colors.grey,
+                          onPressed: () => _viewUserDetails(userId, userName, role),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: const Color(0xFFA78BFA),
+                            side: const BorderSide(color: Color(0xFF6C3FD8)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                           ),
-                          child: Text('Ban User'),
+                          child: const Text('View Details'),
+                        ),
+                        const SizedBox(width: 8),
+                        ElevatedButton(
+                          onPressed: needsAction ? () => _banUser(userId, userName) : null,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: needsAction ? Colors.redAccent : Colors.white12,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                            elevation: 0,
+                          ),
+                          child: const Text('Ban User'),
                         ),
                       ],
                     ),

@@ -20,14 +20,14 @@ class RoleSelectionScreen extends StatelessWidget {
               const Spacer(),
 
               // ── Icon ──
-              Container(
-                width: 72,
-                height: 72,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF6C3FD8),
-                  borderRadius: BorderRadius.circular(22),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(22),
+                child: Image.asset(
+                  'assets/brainiacz_icon.png',
+                  width: 72,
+                  height: 72,
+                  fit: BoxFit.cover,
                 ),
-                child: const Icon(Icons.school_rounded, color: Colors.white, size: 38),
               )
                   .animate()
                   .fadeIn(duration: 700.ms)
